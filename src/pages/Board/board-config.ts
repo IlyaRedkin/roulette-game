@@ -21,7 +21,7 @@ function getEveryNth<T> (arr: T[], nth: number, delta: number): T[] {
 
 export const COLUMN_BOARD_CONFIG: IBoardItem[] = [
   {
-    name: '3-36',
+    name: '1-34',
     label: '2-1',
     includes: getEveryNth(COMMON_NUMBER_LIST, 3, 0),
     multiplier: 3
@@ -33,7 +33,7 @@ export const COLUMN_BOARD_CONFIG: IBoardItem[] = [
     multiplier: 3
   },
   {
-    name: '1-34',
+    name: '3-36',
     label: '2-1',
     includes: getEveryNth(COMMON_NUMBER_LIST, 3, 2),
     multiplier: 3
