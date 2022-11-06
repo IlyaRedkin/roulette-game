@@ -3,7 +3,7 @@ import { IBet } from './_types'
 import { EMPTY_ARRAY, EMPTY_OBJECT, noop } from '../../utils'
 
 interface IBoardContext {
-  bank: number
+  bankAccount: number
   bet: IBet
   updateBet: (newBet: IBet) => void
   betAmount: number
@@ -14,7 +14,7 @@ interface IBoardContext {
 }
 
 export const BoardContext = createContext<IBoardContext>({
-  bank: 1000,
+  bankAccount: 1000,
   bet: EMPTY_OBJECT,
   updateBet: noop,
   betAmount: 100,
@@ -66,7 +66,7 @@ export default function BoardProvider ({ children }: IBoardProvider): React.Reac
       value={{
         bet,
         updateBet,
-        bank: bankAccount,
+        bankAccount,
         betAmount,
         setBetAmount,
         onCalcBets,

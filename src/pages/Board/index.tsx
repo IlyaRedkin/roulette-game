@@ -1,7 +1,7 @@
 import React from 'react'
 import BoardLayout from './BoardLayout'
 import BoardProvider from './BoardContext'
-import UserBank from './UserBank'
+import UserActionPanel from './UserActionPanel'
 import styled from 'styled-components'
 
 export default function Board (): React.ReactElement {
@@ -9,7 +9,7 @@ export default function Board (): React.ReactElement {
     <Layout>
       <BoardProvider>
         <BoardLayout />
-        <UserBank />
+        <UserActionPanel />
       </BoardProvider>
     </Layout>
   )

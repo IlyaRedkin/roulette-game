@@ -3,11 +3,18 @@ import { BoardContext } from './BoardContext'
 import styled from 'styled-components'
 import { getNumberStats } from './win-numbers-utils'
 
-export default function UserBank (): React.ReactElement {
-  const { bet, betAmount, setBetAmount, onCalcBets, bank, winNumberHistory, setBankAccount } = useContext(BoardContext)
+export default function UserActionPanel (): React.ReactElement {
+  const {
+    bet, betAmount, setBetAmount, onCalcBets, bankAccount, winNumberHistory, setBankAccount
+  } = useContext(BoardContext)
 
   const betAmountHandler = (event: ChangeEvent<HTMLInputElement>): void => {
-    setBetAmount(Number(event.target.value))
+    const value = Number(event.target.value)
+    if (value > bankAccount) {
+      setBetAmount(bankAccount)
+    } else {
+      setBetAmount(value)
+    }
   }
 
   const historyLength = winNumberHistory?.length
@@ -26,22 +33,31 @@ export default function UserBank (): React.ReactElement {
   const { hotList, coldList } = useMemo(() => getNumberStats(winNumberHistory), [winNumberHistory])
 
   return (
-    <div>
+    <StyledContainer>
       <div>Win number: {lastWinNumber}</div>
       <div>Hot numbers: {hotList.slice(0, 5).join(', ')}</div>
       <div>Cold numbers: {coldList.slice(0, 5).join(', ')}</div>
-      <div>My bank: {bank}</div>
+      <div>My bank: {bankAccount}</div>
       <div>
-        <input type="number" onChange={betAmountHandler} defaultValue={betAmount}/>
+        <label htmlFor="betAmount">Bet Amount: </label>
+        <input id="betAmount" type="number" onChange={betAmountHandler} defaultValue={betAmount} max={bankAccount}/>
       </div>
-      <div>{Object.keys(bet).map((betName) =>
-        <div key={betName}>
-          <div>{betName}</div>
-        </div>
-      )}</div>
-      {Object.keys(bet).length === 0 && bank === 0 ? tryAgainButton : playButton}
-    </div>
+      <div>
+        <div>Bet list: </div>
+        <div>{Object.entries(bet).map(([betName, { amount }]) =>
+          <div key={betName}>
+            <div>{betName} - {amount}</div>
+          </div>
+        )}</div>
+      </div>
+      {Object.keys(bet).length === 0 && bankAccount === 0 ? tryAgainButton : playButton}
+    </StyledContainer>
   )
 }
 
 const PlayButton = styled.button``
+const StyledContainer = styled.div`
+  & > div {
+    margin: 8px;
+  }
+`
