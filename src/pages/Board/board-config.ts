@@ -1,8 +1,8 @@
 import { IBoardItem } from './_types'
 
 const MAX_INTERNAL_NUMBER = 36
-const commonNumberList = new Array(MAX_INTERNAL_NUMBER).fill(null).map((_, index) => index + 1)
-export const INTERNAL_BOARD_CONFIG: IBoardItem[] = commonNumberList.map((value) => ({
+export const COMMON_NUMBER_LIST = new Array(MAX_INTERNAL_NUMBER).fill(null).map((_, index) => index + 1)
+export const INTERNAL_BOARD_CONFIG: IBoardItem[] = COMMON_NUMBER_LIST.map((value) => ({
   name: String(value),
   label: String(value),
   includes: [value],
@@ -23,19 +23,19 @@ export const COLUMN_BOARD_CONFIG: IBoardItem[] = [
   {
     name: '3-36',
     label: '2-1',
-    includes: getEveryNth(commonNumberList, 3, 0),
+    includes: getEveryNth(COMMON_NUMBER_LIST, 3, 0),
     multiplier: 3
   },
   {
     name: '2-35',
     label: '2-1',
-    includes: getEveryNth(commonNumberList, 3, 1),
+    includes: getEveryNth(COMMON_NUMBER_LIST, 3, 1),
     multiplier: 3
   },
   {
     name: '1-34',
     label: '2-1',
-    includes: getEveryNth(commonNumberList, 3, 2),
+    includes: getEveryNth(COMMON_NUMBER_LIST, 3, 2),
     multiplier: 3
   }
 ]
@@ -43,31 +43,31 @@ export const DOZENS_BOARD_CONFIG: IBoardItem[] = [
   {
     name: '1-12',
     label: '1st 12',
-    includes: commonNumberList.slice(0, 12),
+    includes: COMMON_NUMBER_LIST.slice(0, 12),
     multiplier: 3
   },
   {
     name: '13-24',
     label: '2nd 12',
-    includes: commonNumberList.slice(12, 24),
+    includes: COMMON_NUMBER_LIST.slice(12, 24),
     multiplier: 3
   },
   {
     name: '25-36',
     label: '3rd 12',
-    includes: commonNumberList.slice(24),
+    includes: COMMON_NUMBER_LIST.slice(24),
     multiplier: 3
   }
 ]
-export const EVEN_LIST = commonNumberList.filter((number) => number % 2 === 0)
-export const ODD_LIST = commonNumberList.filter((number) => number % 2 === 1)
+export const EVEN_LIST = COMMON_NUMBER_LIST.filter((number) => number % 2 === 0)
+export const ODD_LIST = COMMON_NUMBER_LIST.filter((number) => number % 2 === 1)
 export const BLACK_LIST = EVEN_LIST
 export const RED_LIST = ODD_LIST
 export const BOTTOM_BOARD_CONFIG: IBoardItem[] = [
   {
     name: '1-18',
     label: '1 to 18',
-    includes: commonNumberList.slice(0, 18),
+    includes: COMMON_NUMBER_LIST.slice(0, 18),
     multiplier: 2
   },
   {
@@ -97,7 +97,7 @@ export const BOTTOM_BOARD_CONFIG: IBoardItem[] = [
   {
     name: '19-36',
     label: '19 to 36',
-    includes: commonNumberList.slice(18),
+    includes: COMMON_NUMBER_LIST.slice(18),
     multiplier: 2
   }
 ]
