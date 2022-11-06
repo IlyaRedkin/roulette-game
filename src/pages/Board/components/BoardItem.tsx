@@ -3,14 +3,15 @@ import styled from 'styled-components'
 import { IBet, IBoardItem } from '../_types'
 import { BLACK_LIST, RED_LIST } from '../board-config'
 import { BoardContext } from '../BoardContext'
+import { ReactComponent as ChipImage } from 'assets/poker-chip.svg'
 
 interface BoardItemProps extends IBoardItem, React.HTMLAttributes<HTMLDivElement> {
   onBetSelect: (bet: IBet) => void
 }
 
 function BoardItem ({ name, label, onBetSelect, includes, multiplier, ...props }: BoardItemProps): React.ReactElement {
-  const { betAmount, bank, bet } = useContext(BoardContext)
-  const canMakeBet = bank > 0
+  const { betAmount, bankAccount, bet } = useContext(BoardContext)
+  const canMakeBet = bankAccount > 0
   const canDeleteBet = Boolean(bet[name])
   const canClick = canMakeBet || canDeleteBet
 
@@ -27,15 +28,18 @@ function BoardItem ({ name, label, onBetSelect, includes, multiplier, ...props }
     })
   }
   return (
-    <StyledBoardItem
-      red={RED_LIST.includes(Number(name))}
-      black={BLACK_LIST.includes(Number(name))}
-      key={name}
-      onClick={onClick} {...props}
-      disabled={!canClick}
-    >
-      {label}
-    </StyledBoardItem>
+    <div style={{ position: 'relative' }}>
+      {canDeleteBet && <StyledChipImage />}
+      <StyledBoardItem
+        red={RED_LIST.includes(Number(name))}
+        black={BLACK_LIST.includes(Number(name))}
+        key={name}
+        onClick={onClick} {...props}
+        disabled={!canClick}
+      >
+        {label}
+      </StyledBoardItem>
+    </div>
   )
 }
 
@@ -63,4 +67,11 @@ const StyledBoardItem = styled.div<IStyledBoardItem>`
   ${(props) => props.red && 'background-color: red;'}
   ${(props) => props.black && 'background-color: black;'}
   ${(props) => props.disabled && 'cursor: not-allowed;'}
+`
+const StyledChipImage = styled(ChipImage)`
+  position: absolute;
+  height: 20px;
+  fill: white;
+  bottom: 0;
+  left: 10px;
 `
