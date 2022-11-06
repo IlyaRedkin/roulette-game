@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react'
 import { IBet } from './_types'
+import { EMPTY_ARRAY, EMPTY_OBJECT, noop } from '../../utils'
 
 interface IBoardContext {
   bank: number
@@ -9,23 +10,25 @@ interface IBoardContext {
   setBetAmount: (betAmount: number) => void
   onCalcBets: () => void
   winNumberHistory: number[]
+  setBankAccount: (amount: number) => void
 }
 
 export const BoardContext = createContext<IBoardContext>({
   bank: 1000,
-  bet: {},
-  updateBet: (newBet: IBet) => {},
+  bet: EMPTY_OBJECT,
+  updateBet: noop,
   betAmount: 100,
-  setBetAmount: (betAmount: number) => {},
-  onCalcBets: () => {},
-  winNumberHistory: []
+  setBetAmount: noop,
+  onCalcBets: noop,
+  winNumberHistory: EMPTY_ARRAY,
+  setBankAccount: noop
 })
 
 interface IBoardProvider {
   children: React.ReactNode
 }
 export default function BoardProvider ({ children }: IBoardProvider): React.ReactElement {
-  const [bank, setBank] = useState<number>(1000)
+  const [bankAccount, setBankAccount] = useState<number>(1000)
   const [winNumberHistory, setWinNumberHistory] = useState<number[]>([])
   const [bet, setBet] = useState<IBet>({})
   const [betAmount, setBetAmount] = useState<number>(100)
@@ -34,7 +37,7 @@ export default function BoardProvider ({ children }: IBoardProvider): React.Reac
     const newBetKey: string = Object.keys(newBet)[0]
     const newBetAmount: number = Object.values(newBet)[0].amount
     if (Object.keys(bet).includes(newBetKey)) {
-      setBank((prev) => prev + bet[newBetKey].amount)
+      setBankAccount((prev) => prev + bet[newBetKey].amount)
       setTimeout(() => {
         delete bet[newBetKey]
         setBet({ ...bet })
@@ -42,7 +45,7 @@ export default function BoardProvider ({ children }: IBoardProvider): React.Reac
       return
     }
     setBet((prevBet) => ({ ...prevBet, ...newBet }))
-    setBank((prev) => prev - newBetAmount)
+    setBankAccount((prev) => prev - newBetAmount)
   }
 
   const onCalcBets = (): void => {
@@ -53,7 +56,7 @@ export default function BoardProvider ({ children }: IBoardProvider): React.Reac
       }
       return acc
     }, 0)
-    setBank((prevAmount) => prevAmount + winAmount)
+    setBankAccount((prevAmount) => prevAmount + winAmount)
     setBet({})
     setWinNumberHistory((prev: number[]) => [...prev, randomNumber])
   }
@@ -63,11 +66,12 @@ export default function BoardProvider ({ children }: IBoardProvider): React.Reac
       value={{
         bet,
         updateBet,
-        bank,
+        bank: bankAccount,
         betAmount,
         setBetAmount,
         onCalcBets,
-        winNumberHistory
+        winNumberHistory,
+        setBankAccount
       }}
     >{children}
     </BoardContext.Provider>

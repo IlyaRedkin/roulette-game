@@ -9,18 +9,30 @@ interface BoardItemProps extends IBoardItem, React.HTMLAttributes<HTMLDivElement
 }
 
 function BoardItem ({ name, label, onBetSelect, includes, multiplier, ...props }: BoardItemProps): React.ReactElement {
-  const { betAmount } = useContext(BoardContext)
-  const onClick = (): void => onBetSelect({
-    [name]: {
-      amount: betAmount,
-      includes,
-      multiplier
+  const { betAmount, bank, bet } = useContext(BoardContext)
+  const canMakeBet = bank > 0
+  const canDeleteBet = Boolean(bet[name])
+  const canClick = canMakeBet || canDeleteBet
+
+  const onClick = (): void => {
+    if (!canClick) {
+      return
     }
-  })
+    onBetSelect({
+      [name]: {
+        amount: betAmount,
+        includes,
+        multiplier
+      }
+    })
+  }
   return (
     <StyledBoardItem
-      red={RED_LIST.includes(Number(name))} black={BLACK_LIST.includes(Number(name))} key={name}
+      red={RED_LIST.includes(Number(name))}
+      black={BLACK_LIST.includes(Number(name))}
+      key={name}
       onClick={onClick} {...props}
+      disabled={!canClick}
     >
       {label}
     </StyledBoardItem>
@@ -32,6 +44,7 @@ export default BoardItem
 interface IStyledBoardItem {
   red: boolean
   black: boolean
+  disabled: boolean
 }
 const StyledBoardItem = styled.div<IStyledBoardItem>`
   box-sizing: border-box;
@@ -43,6 +56,11 @@ const StyledBoardItem = styled.div<IStyledBoardItem>`
   min-width: 50px;
   font-size: 30px;
   color: white;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.5;
+  }
   ${(props) => props.red && 'background-color: red;'}
   ${(props) => props.black && 'background-color: black;'}
+  ${(props) => props.disabled && 'cursor: not-allowed;'}
 `

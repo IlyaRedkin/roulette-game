@@ -3,7 +3,7 @@ import { BoardContext } from './BoardContext'
 import styled from 'styled-components'
 
 export default function UserBank (): React.ReactElement {
-  const { bet, betAmount, setBetAmount, onCalcBets, bank, winNumberHistory } = useContext(BoardContext)
+  const { bet, betAmount, setBetAmount, onCalcBets, bank, winNumberHistory, setBankAccount } = useContext(BoardContext)
 
   const betAmountHandler = (event: ChangeEvent<HTMLInputElement>): void => {
     setBetAmount(Number(event.target.value))
@@ -11,6 +11,17 @@ export default function UserBank (): React.ReactElement {
 
   const historyLength = winNumberHistory?.length
   const lastWinNumber = (historyLength !== 0) ? winNumberHistory[historyLength - 1] : ''
+
+  const tryAgainButton = (
+    <PlayButton onClick={() => setBankAccount(1000)}>
+      Try again
+    </PlayButton>
+  )
+  const playButton = (
+    <PlayButton onClick={onCalcBets} disabled={Object.keys(bet).length === 0}>
+      Play
+    </PlayButton>
+  )
 
   return (
     <div>
@@ -24,9 +35,7 @@ export default function UserBank (): React.ReactElement {
           <div>{betName}</div>
         </div>
       )}</div>
-      <PlayButton onClick={onCalcBets}>
-        Play
-      </PlayButton>
+      {Object.keys(bet).length === 0 && bank === 0 ? tryAgainButton : playButton}
     </div>
   )
 }
