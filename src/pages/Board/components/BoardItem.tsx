@@ -1,69 +1,38 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { IBet, IBoardItem } from '../_types'
+import { IBoardItem } from '../_types'
 import { BLACK_LIST, CORNER_SPLIT_CONFIG, RED_LIST, RIGHT_SPLIT_CONFIG, TOP_SPLIT_CONFIG } from '../board-config'
 import { BoardContext } from '../BoardContext'
 import { ReactComponent as ChipImage } from 'assets/poker-chip.svg'
 import WithClickAround from '../../../HOCs/withClickAround'
+import { getBetKey } from './utils'
+import { useSplitHandler } from '../useSplitHandler'
 
-interface BoardItemProps extends IBoardItem, React.HTMLAttributes<HTMLDivElement> {
-  onBetSelect: (bet: IBet) => void
-}
+export interface BoardItemProps extends IBoardItem, React.HTMLAttributes<HTMLDivElement> {}
 
-function BoardItem ({ name, label, onBetSelect, includes, multiplier, ...props }: BoardItemProps): React.ReactElement {
-  const { betAmount, bankAccount, bet } = useContext(BoardContext)
+function BoardItem (boardItemProps: BoardItemProps): React.ReactElement {
+  const { name, label, includes, multiplier, type, ...props } = boardItemProps
+  const { betAmount, bankAccount, bet, updateBet } = useContext(BoardContext)
   const canMakeBet = bankAccount > 0
-  const canDeleteBet = Boolean(bet[name])
+  const betKey = getBetKey(boardItemProps)
+  const canDeleteBet = Boolean(bet[betKey])
   const canClick = canMakeBet || canDeleteBet
 
   const onClick = (): void => {
     if (!canClick) {
       return
     }
-    onBetSelect({
-      [name]: {
+    updateBet({
+      [betKey]: {
         amount: betAmount,
         includes,
         multiplier
       }
     })
   }
-  const onTopHandler = (): void => {
-    const item: IBoardItem = TOP_SPLIT_CONFIG[name]
-    if (item) {
-      onBetSelect({
-        [item.name]: {
-          amount: betAmount,
-          includes: item.includes,
-          multiplier: item.multiplier
-        }
-      })
-    }
-  }
-  const onRightHandler = (): void => {
-    const item: IBoardItem = RIGHT_SPLIT_CONFIG[name]
-    if (item) {
-      onBetSelect({
-        [item.name]: {
-          amount: betAmount,
-          includes: item.includes,
-          multiplier: item.multiplier
-        }
-      })
-    }
-  }
-  const onTopRightHandler = (): void => {
-    const item: IBoardItem = CORNER_SPLIT_CONFIG[name]
-    if (item) {
-      onBetSelect({
-        [item.name]: {
-          amount: betAmount,
-          includes: item.includes,
-          multiplier: item.multiplier
-        }
-      })
-    }
-  }
+  const onTopHandler = useSplitHandler({ config: TOP_SPLIT_CONFIG, name })
+  const onRightHandler = useSplitHandler({ config: RIGHT_SPLIT_CONFIG, name })
+  const onTopRightHandler = useSplitHandler({ config: CORNER_SPLIT_CONFIG, name })
 
   return (
     <div style={{ position: 'relative' }}>

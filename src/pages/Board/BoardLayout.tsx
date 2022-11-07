@@ -1,42 +1,36 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { BOTTOM_BOARD_CONFIG, COLUMN_BOARD_CONFIG, DOZENS_BOARD_CONFIG, INTERNAL_BOARD_CONFIG } from './board-config'
 import BoardItem from './components/BoardItem'
-import { BoardContext } from './BoardContext'
+import { BetType } from './_types'
 
 function BoardLayout (): React.ReactElement {
-  const { updateBet } = useContext(BoardContext)
-
-  const commonProps = {
-    onBetSelect: updateBet
-  }
   return (
     <StyledContainer>
       <StyledBoard>
         <StyledInnerBoard>
-          <StyledZeroItem name="0" label="0" includes={[0]} multiplier={35} {...commonProps} />
+          <StyledZeroItem name="0" label="0" includes={[0]} multiplier={35} type={BetType.SINGLE} />
           {INTERNAL_BOARD_CONFIG.map((internalBoardItem) =>
             <BoardItem
               key={internalBoardItem.name}
               {...internalBoardItem}
-              {...commonProps}
             />
           )}
           {COLUMN_BOARD_CONFIG.map((columnBoardItem) =>
             <StyledColumnItem
-              key={columnBoardItem.name} {...columnBoardItem} {...commonProps}
+              key={columnBoardItem.name} {...columnBoardItem}
             />
           )}
         </StyledInnerBoard>
         <StyledBottomLines>
           <StyledBottomLine>
             {DOZENS_BOARD_CONFIG.map((columnBoardItem) =>
-              <StyledDozenItem key={columnBoardItem.name} {...columnBoardItem} {...commonProps} />
+              <StyledDozenItem key={columnBoardItem.name} {...columnBoardItem} />
             )}
           </StyledBottomLine>
           <StyledBottomLine>
             {BOTTOM_BOARD_CONFIG.map((columnBoardItem) =>
-              <StyledBottomItem key={columnBoardItem.name} {...columnBoardItem} {...commonProps} />
+              <StyledBottomItem key={columnBoardItem.name} {...columnBoardItem} />
             )}
           </StyledBottomLine>
         </StyledBottomLines>
