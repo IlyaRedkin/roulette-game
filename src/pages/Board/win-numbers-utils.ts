@@ -27,7 +27,9 @@ export const getNumberStats = (winNumberHistory: number[]): { hotList: number[],
   }, { ...defaultMap })
   const winNumberHistoryString = Object.entries(winNumberHistoryMap)
     .map(([key, value]) => `${key}${KEY_VALUE_SEPARATOR}${value}`)
-  const hotOrdered = winNumberHistoryString.concat().sort(ascSortFunc).map(getSplitKey)
+  const hotOrdered = winNumberHistoryString.concat()
+    .filter((item) => item.split(KEY_VALUE_SEPARATOR)[1] !== '0')
+    .sort(ascSortFunc).map(getSplitKey)
   const coldOrdered = winNumberHistoryString.concat().sort(descSortFunc).map(getSplitKey)
   return {
     hotList: hotOrdered,
