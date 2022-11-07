@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react'
-import { IBet } from './_types'
+import { IBet, IBetInner } from './_types'
 import { EMPTY_ARRAY, EMPTY_OBJECT, noop } from '../../utils'
 
 interface IBoardContext {
@@ -11,6 +11,7 @@ interface IBoardContext {
   onCalcBets: () => void
   winNumberHistory: number[]
   setBankAccount: (amount: number) => void
+  winBets: IBetInner[]
 }
 
 export const BoardContext = createContext<IBoardContext>({
@@ -21,7 +22,8 @@ export const BoardContext = createContext<IBoardContext>({
   setBetAmount: noop,
   onCalcBets: noop,
   winNumberHistory: EMPTY_ARRAY,
-  setBankAccount: noop
+  setBankAccount: noop,
+  winBets: EMPTY_ARRAY
 })
 
 interface IBoardProvider {
@@ -31,6 +33,7 @@ export default function BoardProvider ({ children }: IBoardProvider): React.Reac
   const [bankAccount, setBankAccount] = useState<number>(1000)
   const [winNumberHistory, setWinNumberHistory] = useState<number[]>([])
   const [bet, setBet] = useState<IBet>({})
+  const [winBets, setWinBets] = useState<IBetInner[]>([])
   const [betAmount, setBetAmount] = useState<number>(100)
 
   const updateBet = (newBet: IBet): void => {
@@ -50,8 +53,10 @@ export default function BoardProvider ({ children }: IBoardProvider): React.Reac
 
   const onCalcBets = (): void => {
     const randomNumber = Math.floor(Math.random() * 36)
-    const winAmount = Object.values(bet).reduce((acc, { amount, includes: betNumbers, multiplier }) => {
+    const winAmount = Object.values(bet).reduce((acc: number, betInner: IBetInner) => {
+      const { amount, includes: betNumbers, multiplier } = betInner
       if (betNumbers.includes(randomNumber)) {
+        setWinBets((prev) => [...prev, betInner])
         return acc + (amount * multiplier)
       }
       return acc
@@ -71,7 +76,8 @@ export default function BoardProvider ({ children }: IBoardProvider): React.Reac
         setBetAmount,
         onCalcBets,
         winNumberHistory,
-        setBankAccount
+        setBankAccount,
+        winBets
       }}
     >{children}
     </BoardContext.Provider>

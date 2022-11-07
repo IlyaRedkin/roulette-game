@@ -2,10 +2,11 @@ import React, { ChangeEvent, useContext, useMemo } from 'react'
 import { BoardContext } from './BoardContext'
 import styled from 'styled-components'
 import { getNumberStats } from './win-numbers-utils'
+import { IBetInner } from './_types'
 
 export default function UserActionPanel (): React.ReactElement {
   const {
-    bet, betAmount, setBetAmount, onCalcBets, bankAccount, winNumberHistory, setBankAccount
+    bet, betAmount, setBetAmount, onCalcBets, bankAccount, winNumberHistory, setBankAccount, winBets
   } = useContext(BoardContext)
 
   const betAmountHandler = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -37,6 +38,13 @@ export default function UserActionPanel (): React.ReactElement {
       <div>Win number: {lastWinNumber}</div>
       <div>Hot numbers: {hotList.slice(0, 5).join(', ')}</div>
       <div>Cold numbers: {coldList.slice(0, 5).join(', ')}</div>
+      <div>Win bets: {winBets.map((bet: IBetInner) =>
+        <div key={bet.includes.join('')}>{bet.type} {bet.amount * bet.multiplier} {
+          bet.includes.length > 10
+            ? `${bet.includes.slice(0, 3).join(', ')}...${bet.includes.slice(-3).join(', ')}`
+            : `${bet.includes.join(', ')}`
+        }</div>
+      )}</div>
       <div>My bank: {bankAccount}</div>
       <div>
         <label htmlFor="betAmount">Bet Amount: </label>
