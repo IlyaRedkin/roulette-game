@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { IBet, IBoardItem } from '../_types'
-import { BLACK_LIST, RED_LIST } from '../board-config'
+import { BLACK_LIST, CORNER_SPLIT_CONFIG, RED_LIST, RIGHT_SPLIT_CONFIG, TOP_SPLIT_CONFIG } from '../board-config'
 import { BoardContext } from '../BoardContext'
 import { ReactComponent as ChipImage } from 'assets/poker-chip.svg'
 import WithClickAround from '../../../HOCs/withClickAround'
@@ -28,9 +28,50 @@ function BoardItem ({ name, label, onBetSelect, includes, multiplier, ...props }
       }
     })
   }
+  const onTopHandler = (): void => {
+    const item: IBoardItem = TOP_SPLIT_CONFIG[name]
+    if (item) {
+      onBetSelect({
+        [item.name]: {
+          amount: betAmount,
+          includes: item.includes,
+          multiplier: item.multiplier
+        }
+      })
+    }
+  }
+  const onRightHandler = (): void => {
+    const item: IBoardItem = RIGHT_SPLIT_CONFIG[name]
+    if (item) {
+      onBetSelect({
+        [item.name]: {
+          amount: betAmount,
+          includes: item.includes,
+          multiplier: item.multiplier
+        }
+      })
+    }
+  }
+  const onTopRightHandler = (): void => {
+    const item: IBoardItem = CORNER_SPLIT_CONFIG[name]
+    if (item) {
+      onBetSelect({
+        [item.name]: {
+          amount: betAmount,
+          includes: item.includes,
+          multiplier: item.multiplier
+        }
+      })
+    }
+  }
+
   return (
     <div style={{ position: 'relative' }}>
-      <WithClickAround>
+      <WithClickAround
+        onTop={onTopHandler}
+        onRight={onRightHandler}
+        onTopRight={onTopRightHandler}
+      >
         {canDeleteBet && <StyledChipImage />}
         <StyledBoardItem
           red={RED_LIST.includes(Number(name))}

@@ -19,23 +19,26 @@ function getEveryNth<T> (arr: T[], nth: number, delta: number): T[] {
   return result
 }
 
+const COLUMN_1_34 = getEveryNth(COMMON_NUMBER_LIST, 3, 0)
+const COLUMN_2_35 = getEveryNth(COMMON_NUMBER_LIST, 3, 1)
+const COLUMN_3_36 = getEveryNth(COMMON_NUMBER_LIST, 3, 2)
 export const COLUMN_BOARD_CONFIG: IBoardItem[] = [
   {
     name: '1-34',
     label: '2-1',
-    includes: getEveryNth(COMMON_NUMBER_LIST, 3, 0),
+    includes: COLUMN_1_34,
     multiplier: 3
   },
   {
     name: '2-35',
     label: '2-1',
-    includes: getEveryNth(COMMON_NUMBER_LIST, 3, 1),
+    includes: COLUMN_2_35,
     multiplier: 3
   },
   {
     name: '3-36',
     label: '2-1',
-    includes: getEveryNth(COMMON_NUMBER_LIST, 3, 2),
+    includes: COLUMN_3_36,
     multiplier: 3
   }
 ]
@@ -102,10 +105,44 @@ export const BOTTOM_BOARD_CONFIG: IBoardItem[] = [
   }
 ]
 
-export const COMMON_BOARD_CONFIG = [
-  ...INTERNAL_BOARD_CONFIG,
-  ...COLUMN_BOARD_CONFIG,
-  ...DOZENS_BOARD_CONFIG,
-  ...BOTTOM_BOARD_CONFIG
-]
-export const BET_NAMES = COMMON_BOARD_CONFIG.map((configItem: IBoardItem) => configItem.name)
+const getTopSplitMap = (numberItem: number): IBoardItem => ({
+  name: `top-split-${numberItem}_${numberItem + 1}`,
+  label: '',
+  includes: [numberItem, numberItem + 1],
+  multiplier: 17
+})
+const getRightSplitMap = (numberItem: number): IBoardItem => ({
+  name: `right-split-${numberItem}_${numberItem + 3}`,
+  label: '',
+  includes: [numberItem, numberItem + 3],
+  multiplier: 17
+})
+const getCornerSplitMap = (numberItem: number): IBoardItem => ({
+  name: `corner-split-${numberItem}_${numberItem + 1}_${numberItem + 3}_${numberItem + 4}`,
+  label: '',
+  includes: [numberItem, numberItem + 1, numberItem + 3, numberItem + 4],
+  multiplier: 8
+})
+
+const numberToSplit = (mapFunc: (numberItem: number) => IBoardItem) =>
+  (numbers: number[]): Record<string, IBoardItem> =>
+    numbers.reduce((acc: Record<string, IBoardItem>, item: number) => {
+      acc[String(item)] = mapFunc(item)
+      return acc
+    }, {})
+
+const numberToTopSplit = numberToSplit(getTopSplitMap)
+const numberToRightSplit = numberToSplit(getRightSplitMap)
+const numberToCornerSplit = numberToSplit(getCornerSplitMap)
+
+export const TOP_SPLIT_CONFIG: Record<string, IBoardItem> = {
+  ...numberToTopSplit(COLUMN_1_34),
+  ...numberToTopSplit(COLUMN_2_35)
+}
+export const RIGHT_SPLIT_CONFIG: Record<string, IBoardItem> = {
+  ...numberToRightSplit(COMMON_NUMBER_LIST.slice(0, 33))
+}
+export const CORNER_SPLIT_CONFIG: Record<string, IBoardItem> = {
+  ...numberToCornerSplit(COLUMN_1_34.slice(0, -1)),
+  ...numberToCornerSplit(COLUMN_2_35.slice(0, -1))
+}
