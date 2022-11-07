@@ -62,54 +62,33 @@ const BottomLine = styled(Line)`
 `
 
 const Point = styled.div`
-  height: ${BORDER_WIDTH}px;
-  width: ${BORDER_WIDTH}px;
-  position: relative;
+  height: ${BORDER_WIDTH * 10}px;
+  width: ${BORDER_WIDTH * 10}px;
+  position: absolute;
+  background: transparent;
   ${(props) => props.onClick &&
     css`
+      z-index: ${HOVERED_ITEM_Z_INDEX};
       &:hover {
-        position: absolute;
-        width: ${BORDER_WIDTH * 10}px;
-        height: ${BORDER_WIDTH * 10}px;
         background-color: yellow;
-        z-index: ${HOVERED_ITEM_Z_INDEX};
       }
     `}
-  background-color: white;
 `
 const LeftTop = styled(Point)`
-  ${(props) => props.onClick &&
-          css`
-      &:hover {
-        top: -10px;
-        left: -10px;
-      }
-    `}`
+  top: -10px;
+  left: -10px;
+`
 const RightTop = styled(Point)`
-  ${(props) => props.onClick &&
-  css`
-      &:hover {
-        top: -10px;
-        right: -10px;
-      }
-    `}
+  top: -10px;
+  right: -10px;
 `
 const BottomLeft = styled(Point)`
-  ${(props) => props.onClick &&
-          css`
-      &:hover {
-        bottom: -10px;
-        left: -10px;
-      }
-    `}`
+  bottom: -10px;
+  left: -10px;
+`
 const BottomRight = styled(Point)`
-  ${(props) => props.onClick &&
-          css`
-      &:hover {
-        bottom: -10px;
-        right: -10px;
-      }
-    `}
+  bottom: -10px;
+  right: -10px;
 `
 
 const Area = styled.div`
