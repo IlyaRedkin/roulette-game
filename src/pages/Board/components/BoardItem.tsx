@@ -4,6 +4,7 @@ import { IBet, IBoardItem } from '../_types'
 import { BLACK_LIST, RED_LIST } from '../board-config'
 import { BoardContext } from '../BoardContext'
 import { ReactComponent as ChipImage } from 'assets/poker-chip.svg'
+import WithClickAround from '../../../HOCs/withClickAround'
 
 interface BoardItemProps extends IBoardItem, React.HTMLAttributes<HTMLDivElement> {
   onBetSelect: (bet: IBet) => void
@@ -29,16 +30,18 @@ function BoardItem ({ name, label, onBetSelect, includes, multiplier, ...props }
   }
   return (
     <div style={{ position: 'relative' }}>
-      {canDeleteBet && <StyledChipImage />}
-      <StyledBoardItem
-        red={RED_LIST.includes(Number(name))}
-        black={BLACK_LIST.includes(Number(name))}
-        key={name}
-        onClick={onClick} {...props}
-        disabled={!canClick}
-      >
-        {label}
-      </StyledBoardItem>
+      <WithClickAround>
+        {canDeleteBet && <StyledChipImage />}
+        <StyledBoardItem
+          red={RED_LIST.includes(Number(name))}
+          black={BLACK_LIST.includes(Number(name))}
+          key={name}
+          onClick={onClick} {...props}
+          disabled={!canClick}
+        >
+          {label}
+        </StyledBoardItem>
+      </WithClickAround>
     </div>
   )
 }
@@ -52,8 +55,6 @@ interface IStyledBoardItem {
 }
 const StyledBoardItem = styled.div<IStyledBoardItem>`
   box-sizing: border-box;
-  border: 3px solid white;
-  margin: -3px;
   padding-top: 25px;
   padding-bottom: 25px;
   text-align: center;

@@ -57,7 +57,7 @@ const StyledBoard = styled.div`
 const StyledInnerBoard = styled.div`
   display: flex;
   flex-flow: column-reverse wrap;
-  height: 270px;
+  height: 300px;
   width: 750px;
 `
 const StyledColumnItem = styled(BoardItem)`
