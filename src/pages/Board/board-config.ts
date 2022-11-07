@@ -123,14 +123,14 @@ const getTopSplitMap = (numberItem: number): IBoardItem => ({
   label: '',
   includes: [numberItem, numberItem + 1],
   multiplier: 17,
-  type: BetType.SPLIT
+  type: BetType.SPLIT_VERTICAL
 })
 const getRightSplitMap = (numberItem: number): IBoardItem => ({
   name: String(numberItem),
   label: '',
   includes: [numberItem, numberItem + 3],
   multiplier: 17,
-  type: BetType.SPLIT
+  type: BetType.SPLIT_HORIZONTAL
 })
 const getCornerSplitMap = (numberItem: number): IBoardItem => ({
   name: String(numberItem),

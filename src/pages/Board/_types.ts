@@ -1,6 +1,7 @@
 export enum BetType {
   SINGLE = 'single',
-  SPLIT = 'split',
+  SPLIT_VERTICAL = 'split_vertical',
+  SPLIT_HORIZONTAL = 'split_horizontal',
   CORNER = 'corner',
   COLUMN = 'column',
   DOZEN = 'dozen',
@@ -14,7 +15,7 @@ export interface IBoardItem {
   includes: number[]
   multiplier: number
 }
-export interface IBetInner extends Pick<IBoardItem, 'includes' | 'multiplier'> {
+export interface IBetInner extends Pick<IBoardItem, 'includes' | 'multiplier' | 'type'> {
   amount: number
 }
 export interface IBet extends Record<string, IBetInner> {}

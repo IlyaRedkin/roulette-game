@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import { IBoardItem } from '../_types'
 import { BLACK_LIST, CORNER_SPLIT_CONFIG, RED_LIST, RIGHT_SPLIT_CONFIG, TOP_SPLIT_CONFIG } from '../board-config'
 import { BoardContext } from '../BoardContext'
-import { ReactComponent as ChipImage } from 'assets/poker-chip.svg'
 import WithClickAround from '../../../HOCs/withClickAround'
 import { getBetKey } from './utils'
 import { useSplitHandler } from '../useSplitHandler'
 import { useCanIDoBet } from '../useCanIDoBet'
+import SelectedBetIcon from './SelectedBetIcon'
 
 export interface BoardItemProps extends IBoardItem, React.HTMLAttributes<HTMLDivElement> {}
 
@@ -25,7 +25,8 @@ function BoardItem (boardItemProps: BoardItemProps): React.ReactElement {
       [betKey]: {
         amount: betAmount,
         includes,
-        multiplier
+        multiplier,
+        type
       }
     })
   }
@@ -40,13 +41,14 @@ function BoardItem (boardItemProps: BoardItemProps): React.ReactElement {
         onRight={onRightHandler}
         onTopRight={onTopRightHandler}
       >
-        {canDeleteBet && <StyledChipImage />}
+        <SelectedBetIcon name={name} />
         <StyledBoardItem
           red={RED_LIST.includes(Number(name))}
           black={BLACK_LIST.includes(Number(name))}
           key={name}
-          onClick={onClick} {...props}
+          onClick={onClick}
           disabled={!canMakeBet && !canDeleteBet}
+          {...props}
         >
           {label}
         </StyledBoardItem>
@@ -77,11 +79,4 @@ const StyledBoardItem = styled.div<IStyledBoardItem>`
   ${(props) => props.red && 'background-color: red;'}
   ${(props) => props.black && 'background-color: black;'}
   ${(props) => props.disabled && 'cursor: not-allowed;'}
-`
-const StyledChipImage = styled(ChipImage)`
-  position: absolute;
-  height: 20px;
-  fill: white;
-  bottom: 0;
-  left: 10px;
 `

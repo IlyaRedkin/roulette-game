@@ -9,7 +9,7 @@ export const useCanIDoBet = (item: IBoardItem): {
 } => {
   const { bankAccount, bet, betAmount } = useContext(BoardContext)
 
-  const canMakeBet = bankAccount > betAmount
+  const canMakeBet = bankAccount >= betAmount
   const betKey = getBetKey(item)
   const canDeleteBet = Boolean(bet[betKey])
   return {

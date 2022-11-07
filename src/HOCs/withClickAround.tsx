@@ -41,6 +41,8 @@ function WithClickAround ({
 export default WithClickAround
 
 const BORDER_WIDTH = 2
+const HOVERED_ITEM_Z_INDEX = 1
+
 const StyledExternal = styled.div``
 const Line = styled.div`
   display: flex;
@@ -70,7 +72,7 @@ const Point = styled.div`
         width: ${BORDER_WIDTH * 10}px;
         height: ${BORDER_WIDTH * 10}px;
         background-color: yellow;
-        z-index: 1;
+        z-index: ${HOVERED_ITEM_Z_INDEX};
       }
     `}
   background-color: white;
@@ -118,7 +120,7 @@ const VerticalArea = css`
   &:hover {
     width: ${BORDER_WIDTH * 3}px;
     background-color: yellow;
-    z-index: 1;
+    z-index: ${HOVERED_ITEM_Z_INDEX};
     position: absolute;
     height: 100%;
     right: 0;
@@ -128,7 +130,7 @@ const HorizontalArea = css`
   &:hover {
     height: ${BORDER_WIDTH * 3}px;
     background-color: yellow;
-    z-index: 1;
+    z-index: ${HOVERED_ITEM_Z_INDEX};
     position: absolute;
     width: 100%;
   }

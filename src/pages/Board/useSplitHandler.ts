@@ -21,7 +21,8 @@ export const useSplitHandler = ({ config, name }: IUseSplitHandler): (() => void
       [getBetKey(splitItem)]: {
         amount: betAmount,
         includes: splitItem.includes,
-        multiplier: splitItem.multiplier
+        multiplier: splitItem.multiplier,
+        type: splitItem.type
       }
     })
   }
