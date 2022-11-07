@@ -1,4 +1,4 @@
-import { IBoardItem } from './_types'
+import { BetType, IBoardItem } from './_types'
 
 const MAX_INTERNAL_NUMBER = 36
 export const COMMON_NUMBER_LIST = new Array(MAX_INTERNAL_NUMBER).fill(null).map((_, index) => index + 1)
@@ -6,7 +6,8 @@ export const INTERNAL_BOARD_CONFIG: IBoardItem[] = COMMON_NUMBER_LIST.map((value
   name: String(value),
   label: String(value),
   includes: [value],
-  multiplier: 35
+  multiplier: 35,
+  type: BetType.SINGLE
 }))
 
 function getEveryNth<T> (arr: T[], nth: number, delta: number): T[] {
@@ -27,19 +28,22 @@ export const COLUMN_BOARD_CONFIG: IBoardItem[] = [
     name: '1-34',
     label: '2-1',
     includes: COLUMN_1_34,
-    multiplier: 3
+    multiplier: 3,
+    type: BetType.COLUMN
   },
   {
     name: '2-35',
     label: '2-1',
     includes: COLUMN_2_35,
-    multiplier: 3
+    multiplier: 3,
+    type: BetType.COLUMN
   },
   {
     name: '3-36',
     label: '2-1',
     includes: COLUMN_3_36,
-    multiplier: 3
+    multiplier: 3,
+    type: BetType.COLUMN
   }
 ]
 export const DOZENS_BOARD_CONFIG: IBoardItem[] = [
@@ -47,19 +51,22 @@ export const DOZENS_BOARD_CONFIG: IBoardItem[] = [
     name: '1-12',
     label: '1st 12',
     includes: COMMON_NUMBER_LIST.slice(0, 12),
-    multiplier: 3
+    multiplier: 3,
+    type: BetType.DOZEN
   },
   {
     name: '13-24',
     label: '2nd 12',
     includes: COMMON_NUMBER_LIST.slice(12, 24),
-    multiplier: 3
+    multiplier: 3,
+    type: BetType.DOZEN
   },
   {
     name: '25-36',
     label: '3rd 12',
     includes: COMMON_NUMBER_LIST.slice(24),
-    multiplier: 3
+    multiplier: 3,
+    type: BetType.DOZEN
   }
 ]
 export const EVEN_LIST = COMMON_NUMBER_LIST.filter((number) => number % 2 === 0)
@@ -71,57 +78,66 @@ export const BOTTOM_BOARD_CONFIG: IBoardItem[] = [
     name: '1-18',
     label: '1 to 18',
     includes: COMMON_NUMBER_LIST.slice(0, 18),
-    multiplier: 2
+    multiplier: 2,
+    type: BetType.EXTERNAL
   },
   {
     name: 'even',
     label: 'EVEN',
     includes: EVEN_LIST,
-    multiplier: 2
+    multiplier: 2,
+    type: BetType.EXTERNAL
   },
   {
     name: 'red',
     label: 'red',
     includes: RED_LIST,
-    multiplier: 2
+    multiplier: 2,
+    type: BetType.EXTERNAL
   },
   {
     name: 'black',
     label: 'black',
     includes: BLACK_LIST,
-    multiplier: 2
+    multiplier: 2,
+    type: BetType.EXTERNAL
   },
   {
     name: 'odd',
     label: 'odd2',
     includes: ODD_LIST,
-    multiplier: 2
+    multiplier: 2,
+    type: BetType.EXTERNAL
   },
   {
     name: '19-36',
     label: '19 to 36',
     includes: COMMON_NUMBER_LIST.slice(18),
-    multiplier: 2
+    multiplier: 2,
+    type: BetType.EXTERNAL
   }
 ]
 
 const getTopSplitMap = (numberItem: number): IBoardItem => ({
-  name: `top-split-${numberItem}_${numberItem + 1}`,
+  name: String(numberItem),
   label: '',
   includes: [numberItem, numberItem + 1],
-  multiplier: 17
+  multiplier: 17,
+  type: BetType.SPLIT
 })
 const getRightSplitMap = (numberItem: number): IBoardItem => ({
-  name: `right-split-${numberItem}_${numberItem + 3}`,
+  name: String(numberItem),
   label: '',
   includes: [numberItem, numberItem + 3],
-  multiplier: 17
+  multiplier: 17,
+  type: BetType.SPLIT
 })
 const getCornerSplitMap = (numberItem: number): IBoardItem => ({
-  name: `corner-split-${numberItem}_${numberItem + 1}_${numberItem + 3}_${numberItem + 4}`,
+  name: String(numberItem),
   label: '',
   includes: [numberItem, numberItem + 1, numberItem + 3, numberItem + 4],
-  multiplier: 8
+  multiplier: 8,
+  type: BetType.CORNER
 })
 
 const numberToSplit = (mapFunc: (numberItem: number) => IBoardItem) =>
