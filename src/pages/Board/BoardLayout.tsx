@@ -61,6 +61,7 @@ const StyledColumnItem = styled(BoardItem)`
 const StyledBottomLines = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: 54px;
 `
 const StyledBottomLine = styled.div`
   display: flex;
@@ -71,14 +72,14 @@ const StyledBottomLine = styled.div`
 const StyledDozenItem = styled(BoardItem)`
   padding-top: 25px;
   padding-bottom: 25px;
-  min-width: 200px;
+  min-width: 212px;
 `
 const StyledBottomItem = styled(BoardItem)`
   padding-top: 25px;
   padding-bottom: 25px;
-  min-width: 100px;
+  min-width: 103px;
 `
 const StyledZeroItem = styled(BoardItem)`
-  padding-top: 110px;
-  padding-bottom: 111px;
+  padding-top: 114px;
+  padding-bottom: 114px;
 `
