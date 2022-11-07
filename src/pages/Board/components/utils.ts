@@ -1,3 +1,3 @@
 import { IBoardItem } from '../_types'
 
-export const getBetKey = (item: IBoardItem): string => `${item.name}_${item.type}`
+export const getBetKey = (item: IBoardItem): string => `${item?.name}_${item?.type}`

@@ -2,22 +2,31 @@ import { IBoardItem } from './_types'
 import { useContext } from 'react'
 import { BoardContext } from './BoardContext'
 import { getBetKey } from './components/utils'
+import { useCanIDoBet } from './useCanIDoBet'
 
 interface IUseSplitHandler {
-  config: any
+  config: Record<string, IBoardItem>
   name: string
 }
 export const useSplitHandler = ({ config, name }: IUseSplitHandler): (() => void) | undefined => {
   const { betAmount, updateBet } = useContext(BoardContext)
-  const topSplitItem: IBoardItem = config[name]
+  const splitItem: IBoardItem = config[name]
+  const { canMakeBet, canDeleteBet } = useCanIDoBet(splitItem)
+
   const handler = (): void => {
+    if (!canMakeBet && !canDeleteBet) {
+      return
+    }
     updateBet({
-      [getBetKey(topSplitItem)]: {
+      [getBetKey(splitItem)]: {
         amount: betAmount,
-        includes: topSplitItem.includes,
-        multiplier: topSplitItem.multiplier
+        includes: splitItem.includes,
+        multiplier: splitItem.multiplier
       }
     })
   }
-  return topSplitItem && handler
+  if (!canMakeBet && !canDeleteBet) {
+    return
+  }
+  return splitItem && handler
 }

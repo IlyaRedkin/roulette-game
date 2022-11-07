@@ -7,19 +7,18 @@ import { ReactComponent as ChipImage } from 'assets/poker-chip.svg'
 import WithClickAround from '../../../HOCs/withClickAround'
 import { getBetKey } from './utils'
 import { useSplitHandler } from '../useSplitHandler'
+import { useCanIDoBet } from '../useCanIDoBet'
 
 export interface BoardItemProps extends IBoardItem, React.HTMLAttributes<HTMLDivElement> {}
 
 function BoardItem (boardItemProps: BoardItemProps): React.ReactElement {
   const { name, label, includes, multiplier, type, ...props } = boardItemProps
-  const { betAmount, bankAccount, bet, updateBet } = useContext(BoardContext)
-  const canMakeBet = bankAccount > 0
+  const { betAmount, updateBet } = useContext(BoardContext)
   const betKey = getBetKey(boardItemProps)
-  const canDeleteBet = Boolean(bet[betKey])
-  const canClick = canMakeBet || canDeleteBet
+  const { canMakeBet, canDeleteBet } = useCanIDoBet(boardItemProps)
 
   const onClick = (): void => {
-    if (!canClick) {
+    if (!canMakeBet && !canDeleteBet) {
       return
     }
     updateBet({
@@ -47,7 +46,7 @@ function BoardItem (boardItemProps: BoardItemProps): React.ReactElement {
           black={BLACK_LIST.includes(Number(name))}
           key={name}
           onClick={onClick} {...props}
-          disabled={!canClick}
+          disabled={!canMakeBet && !canDeleteBet}
         >
           {label}
         </StyledBoardItem>
